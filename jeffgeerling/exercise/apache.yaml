@@ -1,0 +1,30 @@
+---
+- name: playbook will install and start apache on app1 host
+  hosts: app1
+  become: true
+  tasks:
+  - name: Install Apache.
+    yum:
+      name:
+        - httpd
+        - httpd-devel
+      state: present
+  # commenting out below as we dont have httpd.conf
+  # - name: Configure Apache
+  #   copy:
+  #     src: "{{ item.src }}"
+  #     dest: "{{ item.dest }}"
+  #     owner: root
+  #     group: root
+  #     mode: 0644
+  #   with_items:
+  #     - src: httpd.conf
+  #       dest: /etc/httpd/conf/httpd.conf
+  #     - src: httpd-vhosts.conf
+  #       dest: /etc/httpd/conf/httpd-vhosts.conf
+
+  - name: Configure Apache
+    service:
+      name: httpd
+      state: started
+      enabled: yes

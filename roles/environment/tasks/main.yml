@@ -1,0 +1,29 @@
+---
+# - name: Host file entries
+#   lineinfile:
+#     path: /etc/hosts
+#     line: '127.0.0.1 {{ item }}'
+#   with_items: "{{subdomains}}"
+
+# - name: Host file entries
+#   lineinfile:
+#     path: /etc/hosts
+#     line: '127.0.0.1 {{ domain_name }}'
+
+- name: Ensure botocore and boto3 modules are installed
+  pip:
+    name: ["boto3", "botocore"]
+    extra_args: "--user"
+
+- name: create virtual environment and install application packages with poetry
+  shell: POETRY_VIRTUALENVS_CREATE=0 POETRY_EXPERIMENTAL_NEW_INSTALLER="" {{ app_venv }}/bin/poetry install
+
+- name: Copy environment vars
+  template:
+    src: environment_vars.j2
+    dest: "{{app_path_conf}}"
+
+- name: Ansible copy directory to the remote server
+  copy:
+    src: /Users/Shared/learn/jenkins/repo/pipeline
+    dest: /project

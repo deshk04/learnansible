@@ -1,0 +1,76 @@
+Cloudformation
+---------------
+To create aws stack
+aws cloudformation create-stack --stack-name x80-devstack --template-body file://x80dev_ec2.yaml --parameters file://cf_env.json
+
+cf_env.json: has environment variables
+
+To delete aws stack
+aws cloudformation delete-stack --stack-name x80-devstack
+
+To update aws stack
+aws cloudformation update-stack --stack-name x80-devstack --template-body file://x80dev_ec2.yaml --parameters file://cf_env.json
+
+
+Ansible
+--------
+
+
+ansible.cfg
+------------
+
+you can have multiple ansible.cfg file, ansible picks up the file from current directory first
+in the current ansible.cfg we have private_key_file (.pem file)
+
+ansible-config init --disabled -t all > ansible.cfg
+
+hosts
+------
+
+hosts file contains list of hosts, you can then run something like
+
+sudo ansible all -i hosts -u ec2-user -m ping
+
+run for all entries in hosts with module ping
+if you want the setup information of the server, you can do
+
+sudo ansible all -i hosts -u ec2-user -m setup
+
+you can also find local machine info with
+
+sudo ansible localhost -m setup
+
+Roles
+------
+To create roles, under roles directory run the below
+
+ansible-galaxy init <rolename>
+ansible-galaxy init cloudformation
+tree structure will look something like
+.
+└── cloudformation
+    ├── README.md
+    ├── defaults
+    │   └── main.yml
+    ├── files
+    ├── handlers
+    │   └── main.yml
+    ├── meta
+    │   └── main.yml
+    ├── tasks
+    │   └── main.yml
+    ├── templates
+    ├── tests
+    │   ├── inventory
+    │   └── test.yml
+    └── vars
+        └── main.yml
+
+
+
+cloudformation role will have aws stack information from the first section
+
+
+ansible-playbook -c local -i inventories/$(inventory)/ x80_deploy.yml --extra-vars="version=$(version)";
+
+ansible-playbook -c local -i inventories/dev/ x80_deploy.yml --extra-vars="env=dev";

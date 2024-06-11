@@ -1,0 +1,16 @@
+DJANGO_SETTINGS_MODULE="{{ app_settings_module }}"
+DB_NAME="{{ rds_db_name }}"
+DB_USERNAME="{{ rds_username }}"
+DB_PASSWORD="{{ rds_password }}"
+DB_HOST="{{ rds_facts.instance.endpoint }}"
+DB_PORT="{{ rds_facts.instance.port }}"
+
+PYTHONPATH="{{app_path}}"
+AWS_REGION="{{aws_region}}"
+DISPLAY=:1
+
+ENVIRONMENT={{env}}
+
+DJANGO_LANGUAGE_CODE="{{ language }}"
+
+export PYTHONPATH

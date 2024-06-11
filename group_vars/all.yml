@@ -1,0 +1,12 @@
+---
+project: x80-pipeline
+project_code: x80
+app_name: pipeline
+app_code: "{{project_code}}-{{app_name}}"
+app_bind_address: localhost:8000
+app_path: /project
+django_root_folder: "{{ app_path }}/{{app_name}}"
+app_static_path: "{{ django_root_folder }}/static"
+wsgi_path: "{{app_name}}.wsgi"
+app_path_conf: "/env_variables"
+VpcCidr: "10.1.0.0/16"

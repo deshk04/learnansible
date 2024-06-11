@@ -1,0 +1,41 @@
+---
+# tasks file for cloudformation
+
+- name: cloudformation - render userdata template
+  template:
+    src: roles/cloudformation/templates/userdata.sh.j2
+    dest: roles/cloudformation/templates/userdata.sh
+
+- name: cloudformation - render cloudformation template
+  template:
+    src: roles/cloudformation/templates/stack.yml.j2
+    dest: roles/cloudformation/templates/stack.yml
+
+- name: cloudformation start
+  cloudformation:
+    stack_name: "{{ stack_name }}"
+    state: present
+    region: "{{ aws_region }}"
+    disable_rollback: true
+    template: roles/cloudformation/templates/stack.yml
+    tags:
+      stack: "{{ stack_name }}"
+
+# - name: Get ec2 instances info
+#   ec2_instance_info:
+#     region: "{{ aws_region }}"
+#     filters:
+#       "tag:stack": "{{ stack_name }}"
+#       instance-state-name: [ "running" ]
+#   register: ec2_list
+
+# - name: Add instances to inventory
+#   add_host:
+#     name: "{{ item.public_dns_name }}"
+#     ansible_user: ec2-user
+#     host_key_checking: false
+#     groups: "aws,{{ item.tags.env }},{{ item.tags.app }}"
+#   no_log: true
+#   when: ec2_list.instances|length > 0
+#   loop: "{{ ec2_list['instances'] | flatten(levels=1) }}"
+

@@ -1,0 +1,21 @@
+---
+env: dev
+stack_name: "{{project}}-{{env}}"
+aws_region: ap-southeast-2
+django_login_url: /admin/login/
+# EC2
+ec2_key_name: awskeypair
+ec2_healthcheck_url: /sw/api/heartbeat/
+ec2_ami: ami-06a524880a10d79ba
+# Be sure to adjust app_gunicorn_num_threads and app_gunicorn_num_workers according to the number of vCPUs available on the seleted ec2_instance_type
+ec2_instance_type: t2.micro
+ec2_instance_name: "{{project}}-{{app_name}}-instance"
+#Application variables
+app_run_user: root
+app_run_group: root
+app_bind_address: localhost:8000
+app_artifact: "/tmp/{{env}}/app"
+app_requirements: "/tmp/{{env}}/requirements/requirements.txt"
+app_settings_module: "config.settings"
+app_path_conf: /env_variables
+language: en
